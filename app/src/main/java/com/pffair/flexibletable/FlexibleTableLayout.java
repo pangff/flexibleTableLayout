@@ -42,7 +42,6 @@ public class FlexibleTableLayout extends ViewGroup {
     public void addItems(List<FlexibleItem> flexibleItemList) {
         itemList.clear();
         if (flexibleItemList != null) {
-            this.removeAllViews();
             itemList.addAll(flexibleItemList);
             this.removeAllViews();
             for (int i = 0; i < itemList.size(); i++) {
@@ -80,11 +79,23 @@ public class FlexibleTableLayout extends ViewGroup {
         }
     }
 
+    /**
+     * 根据单元格index计算view绘制起始位置
+     * @param rowIndex
+     * @param columnIndex
+     * @return
+     */
     private int[] calculateLocationByIndex(int rowIndex, int columnIndex) {
         return new int[]{columnIndex * cellWidth, rowIndex * cellHeight};
     }
 
 
+    /**
+     * 根据当前元素行列数以及它应该的起始位置 将它占据的单元格设置为1（已占用）
+     * @param index
+     * @param cellRowCount
+     * @param cellColumnCount
+     */
     private void occuptyCellIndex(int index,int cellRowCount,int cellColumnCount){
         for(int i=0;i<cellColumnCount;i++){
             indexArray[index+i] = 1;
@@ -94,11 +105,20 @@ public class FlexibleTableLayout extends ViewGroup {
         }
     }
 
+    /**
+     * 当前index是否被占用
+     * @param index
+     * @return
+     */
     private boolean hasOccupy(int index){
         return indexArray[index] == 1;
     }
 
 
+    /**
+     * 找到没有被占据的第一个单元格index
+     * @return
+     */
     private int getCurrentCellStartIndex(){
         for(int i=0;i<indexArray.length;i++){
             if(!hasOccupy(i)){
