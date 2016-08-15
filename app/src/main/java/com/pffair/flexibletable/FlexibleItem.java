@@ -14,11 +14,11 @@ public class FlexibleItem {
 
     public int columnCount;
 
-    public int index;
+    public int startCellIndex;
 
-    public int rowIndex;
+    public int startRowIndex;
 
-    public int columnIndex;
+    public int startColumnIndex;
 
     public FlexibleItem(int rowCount, int columnCount, View itemView) {
         this.itemView = itemView;
@@ -27,10 +27,10 @@ public class FlexibleItem {
     }
 
     public void setRowIndex(int index, int containerColumnCount) {
-        rowIndex = index / containerColumnCount;
+        startRowIndex = index / containerColumnCount;
     }
 
     public void setColumnIndex(int index, int containerColumnCount) {
-        columnIndex =  index%containerColumnCount;
+        startColumnIndex =  index%containerColumnCount;
     }
 }
