@@ -1,7 +1,10 @@
 package com.pffair.flexibletable;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.database.DataSetObserver;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +27,9 @@ public class FlexibleTable extends ViewGroup {
 
     private int cellHeight = 0;
 
+    private float horizontalSpace = 15;
+
+    private float verticalSpace = 15;
 
     DataSetObserver mDataSetObserver;
 
@@ -35,6 +41,64 @@ public class FlexibleTable extends ViewGroup {
 
     private TableItemClickListener mTableItemClickListener;
 
+    Paint mPaint;
+
+    int diverColor;
+
+
+    public interface TableItemClickListener {
+
+        void onItemClicked(View itemView, int position);
+    }
+
+    public FlexibleTable(Context context, AttributeSet attrs) {
+        super(context, attrs);
+
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.FlexibleTable);
+
+        diverColor = ta.getColor(R.styleable.FlexibleTable_diverColor, getResources().getColor(android.R.color.darker_gray));
+        rowCount = ta.getInteger(R.styleable.FlexibleTable_row, 1);
+        columnCount = ta.getInteger(R.styleable.FlexibleTable_column, 1);
+        verticalSpace = ta.getDimension(R.styleable.FlexibleTable_verticalSpace,0f);
+        horizontalSpace= ta.getDimension(R.styleable.FlexibleTable_horizontalSpace,0f);
+        ta.recycle();
+
+        init();
+    }
+
+    public FlexibleTable(Context context) {
+        super(context);
+        init();
+    }
+
+    private void init(){
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+    }
+
+    public void setOnTableItemClickListener(TableItemClickListener tableItemClickListener) {
+        this.mTableItemClickListener = tableItemClickListener;
+    }
+
+    public void setFlexibleTableVolume(int rowCount, int columnCount) {
+        this.rowCount = rowCount;
+        this.columnCount = columnCount;
+        indexArray = new int[cellWidth * columnCount];
+    }
+
+    public void setHorizontalSpace(float space) {
+        this.horizontalSpace = space;
+    }
+
+    public void setVerticalSpace(float space) {
+        this.verticalSpace = space;
+    }
+
+    public void setDiverColor(int color) {
+        this.diverColor = color;
+    }
+
+
     public void setAdapter(FlexibleTableAdapter flexibleTableAdapter) {
         this.mFlexibleTableAdapter = flexibleTableAdapter;
 
@@ -44,7 +108,7 @@ public class FlexibleTable extends ViewGroup {
 
         resetList();
 
-        if(mFlexibleTableAdapter!=null){
+        if (mFlexibleTableAdapter != null) {
 
             mDataSetObserver = new DataSetObserver() {
                 @Override
@@ -57,28 +121,9 @@ public class FlexibleTable extends ViewGroup {
         }
     }
 
-    private void resetList(){
+    private void resetList() {
         itemList.clear();
-        indexArray = new int[rowCount*columnCount];
-    }
-
-    public interface TableItemClickListener {
-
-        void onItemClicked(View itemView, int position);
-    }
-
-    public FlexibleTable(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public FlexibleTable(Context context) {
-        super(context);
-    }
-
-    public void setFlexibleTableVolume(int rowCount, int columnCount) {
-        this.rowCount = rowCount;
-        this.columnCount = columnCount;
-        indexArray = new int[cellWidth*columnCount];
+        indexArray = new int[rowCount * columnCount];
     }
 
     private void reLayout() {
@@ -92,7 +137,6 @@ public class FlexibleTable extends ViewGroup {
             addItemView(i, item);
         }
     }
-
 
     private void addItemView(int index, final FlexibleItem item) {
         item.startCellIndex = getCurrentCellStartIndex();
@@ -114,9 +158,6 @@ public class FlexibleTable extends ViewGroup {
     }
 
 
-    public void setOnTableItemClickListener(TableItemClickListener tableItemClickListener) {
-        this.mTableItemClickListener = tableItemClickListener;
-    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -144,12 +185,48 @@ public class FlexibleTable extends ViewGroup {
         for (int i = 0; i < itemList.size(); i++) {
             FlexibleItem item = itemList.get(i);
             if (item != null) {
-                int[] location = calculateLocationByIndex(item.startRowIndex,item.startColumnIndex);
+                int[] location = calculateLocationByIndex(item.startRowIndex,
+                        item.startColumnIndex);
+
                 int left = l + location[0];
                 int top = t + location[1];
                 int right = left + cellWidth * item.columnCount;
                 int bottom = top + cellHeight * item.rowCount;
+                if(left!=l){
+                    left = (int) (left + verticalSpace);
+                }
+                if(top!=t){
+                    top = (int) (top+ horizontalSpace);
+                }
                 item.itemView.layout(left, top, right, bottom);
+            }
+        }
+    }
+
+
+
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+        super.dispatchDraw(canvas);
+        drawDiver(canvas);
+    }
+
+    private void drawDiver(Canvas canvas){
+        mPaint.setColor(diverColor);
+        for (int i = 0; i < itemList.size(); i++) {
+            FlexibleItem item = itemList.get(i);
+            if (item != null) {
+                int[] location = calculateLocationByIndex(item.startRowIndex,item.startColumnIndex);
+                int left = getLeft() + location[0];
+                int top = getTop() + location[1];
+                int right = left + cellWidth * item.columnCount;
+                int bottom = top + cellHeight * item.rowCount;
+                if(left!=getLeft()){
+                    canvas.drawRect(left,top,left+verticalSpace,bottom,mPaint);
+                }
+                if(top!=getTop()){
+                    canvas.drawRect(left,top,right,top+horizontalSpace,mPaint);
+                }
             }
         }
     }

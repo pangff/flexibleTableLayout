@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="FlexibleTable">
+        <attr name="row" format="integer" />
+        <attr name="column" format="integer" />
+        <attr name="diverColor" format="color" />
+        <attr name="verticalSpace" format="dimension" />
+        <attr name="horizontalSpace" format="dimension" />
+    </declare-styleable>
+
+</resources>

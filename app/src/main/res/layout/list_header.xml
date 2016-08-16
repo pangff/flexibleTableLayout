@@ -7,8 +7,14 @@
         tools:context="com.pffair.flexibletable.MainActivity">
 
     <com.pffair.flexibletable.FlexibleTable
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:id="@+id/ftl_layout"
             android:background="@color/colorPrimaryDark"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            app:column="4"
+            app:row="2"
+            app:horizontalSpace="5dp"
+            app:verticalSpace="5dp"
+            app:diverColor="#ffffff"/>
 </RelativeLayout>

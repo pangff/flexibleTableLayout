@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         ImageView imageView1 = new ImageView(this);
         imageView1.setBackgroundColor(Color.BLUE);
-        MyFlexibleTableAdapter.Item flexibleItem1 = new MyFlexibleTableAdapter.Item(3, 1, imageView1);
+        MyFlexibleTableAdapter.Item flexibleItem1 = new MyFlexibleTableAdapter.Item(2, 1, imageView1);
         flexibleItemList.add(flexibleItem1);
 
 
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
         frameLayout4.addView(imageView4,lp);
-        MyFlexibleTableAdapter.Item flexibleItem4 = new MyFlexibleTableAdapter.Item(1, 4, frameLayout4);
+        MyFlexibleTableAdapter.Item flexibleItem4 = new MyFlexibleTableAdapter.Item(1, 3, frameLayout4);
         flexibleItemList.add(flexibleItem4);
 
         return flexibleItemList;
