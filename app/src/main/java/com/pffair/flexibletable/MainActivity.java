@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
         ImageView imageView3 = new ImageView(this);
         imageView3.setBackgroundColor(Color.CYAN);
-        MyFlexibleTableAdapter.Item flexibleItem3 = new MyFlexibleTableAdapter.Item(1, 1, imageView3);
+        MyFlexibleTableAdapter.Item flexibleItem3 = new MyFlexibleTableAdapter.Item(1, 2, imageView3);
         flexibleItemList.add(flexibleItem3);
 
 

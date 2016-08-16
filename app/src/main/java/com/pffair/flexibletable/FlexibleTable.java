@@ -6,7 +6,6 @@ import android.database.DataSetObserver;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -56,11 +55,12 @@ public class FlexibleTable extends ViewGroup {
 
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.FlexibleTable);
 
-        diverColor = ta.getColor(R.styleable.FlexibleTable_diverColor, getResources().getColor(android.R.color.darker_gray));
+        diverColor = ta.getColor(R.styleable.FlexibleTable_diverColor,
+                getResources().getColor(android.R.color.darker_gray));
         rowCount = ta.getInteger(R.styleable.FlexibleTable_row, 1);
         columnCount = ta.getInteger(R.styleable.FlexibleTable_column, 1);
-        verticalSpace = ta.getDimension(R.styleable.FlexibleTable_verticalSpace,0f);
-        horizontalSpace= ta.getDimension(R.styleable.FlexibleTable_horizontalSpace,0f);
+        verticalSpace = ta.getDimension(R.styleable.FlexibleTable_verticalSpace, 0f);
+        horizontalSpace = ta.getDimension(R.styleable.FlexibleTable_horizontalSpace, 0f);
         ta.recycle();
 
         init();
@@ -71,7 +71,7 @@ public class FlexibleTable extends ViewGroup {
         init();
     }
 
-    private void init(){
+    private void init() {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
     }
@@ -158,7 +158,6 @@ public class FlexibleTable extends ViewGroup {
     }
 
 
-
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         for (int i = 0; i < itemList.size(); i++) {
@@ -192,17 +191,21 @@ public class FlexibleTable extends ViewGroup {
                 int top = t + location[1];
                 int right = left + cellWidth * item.columnCount;
                 int bottom = top + cellHeight * item.rowCount;
-                if(left!=l){
+                if (left != l) {
                     left = (int) (left + verticalSpace);
                 }
-                if(top!=t){
-                    top = (int) (top+ horizontalSpace);
+                if (top != t) {
+                    top = (int) (top + horizontalSpace);
+                }
+                if (right > r || bottom > b) {
+                    throw new RuntimeException(
+                            "数据不合法超出了容器范围:第"+i+"条数据,第" + (item.startRowIndex + 1) + "行,第" + (item.startColumnIndex
+                                    + 1) + "列为起始位置");
                 }
                 item.itemView.layout(left, top, right, bottom);
             }
         }
     }
-
 
 
     @Override
@@ -211,21 +214,22 @@ public class FlexibleTable extends ViewGroup {
         drawDiver(canvas);
     }
 
-    private void drawDiver(Canvas canvas){
+    private void drawDiver(Canvas canvas) {
         mPaint.setColor(diverColor);
         for (int i = 0; i < itemList.size(); i++) {
             FlexibleItem item = itemList.get(i);
             if (item != null) {
-                int[] location = calculateLocationByIndex(item.startRowIndex,item.startColumnIndex);
+                int[] location = calculateLocationByIndex(item.startRowIndex,
+                        item.startColumnIndex);
                 int left = getLeft() + location[0];
                 int top = getTop() + location[1];
                 int right = left + cellWidth * item.columnCount;
                 int bottom = top + cellHeight * item.rowCount;
-                if(left!=getLeft()){
-                    canvas.drawRect(left,top,left+verticalSpace,bottom,mPaint);
+                if (left != getLeft()) {
+                    canvas.drawRect(left, top, left + verticalSpace, bottom, mPaint);
                 }
-                if(top!=getTop()){
-                    canvas.drawRect(left,top,right,top+horizontalSpace,mPaint);
+                if (top != getTop()) {
+                    canvas.drawRect(left, top, right, top + horizontalSpace, mPaint);
                 }
             }
         }
@@ -250,7 +254,7 @@ public class FlexibleTable extends ViewGroup {
             indexArray[index + i * columnCount] = 1;
         }
     }
-    
+
 
     /**
      * 当前index是否被占用
