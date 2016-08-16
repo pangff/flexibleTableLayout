@@ -144,7 +144,7 @@ public class FlexibleTable extends ViewGroup {
         item.setColumnIndex(item.startCellIndex, columnCount);
         occupyCellIndex(item.startCellIndex, item.rowCount, item.columnCount);
         LayoutParams layoutParams = new LayoutParams(cellWidth, cellHeight);
-        this.addViewInLayout(item.itemView, -1, layoutParams, true);
+        this.addView(item.itemView, layoutParams);
         final int position = index;
         item.itemView.setOnClickListener(new OnClickListener() {
             @Override
