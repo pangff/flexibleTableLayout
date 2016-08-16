@@ -250,12 +250,7 @@ public class FlexibleTable extends ViewGroup {
             indexArray[index + i * columnCount] = 1;
         }
     }
-
-    @Override
-    public void requestLayout() {
-        Log.e("pangff", "pangff-requestLayout");
-        super.requestLayout();
-    }
+    
 
     /**
      * 当前index是否被占用
