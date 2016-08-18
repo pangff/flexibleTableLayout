@@ -128,6 +128,7 @@ public class FlexibleTable extends ViewGroup {
 
     private void reLayout() {
         resetList();
+        removeAllViews();
         int size = mFlexibleTableAdapter.getCount();
         for (int i = 0; i < size; i++) {
             final View itemView = mFlexibleTableAdapter.getView(i);
@@ -176,6 +177,14 @@ public class FlexibleTable extends ViewGroup {
         super.onSizeChanged(w, h, oldw, oldh);
         cellWidth = w / columnCount;
         cellHeight = h / rowCount;
+
+        //大小发生变化后需要重新measure
+        this.post(new Runnable() {
+            @Override
+            public void run() {
+                requestLayout();
+            }
+        });
     }
 
     @Override

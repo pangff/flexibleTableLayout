@@ -2,6 +2,7 @@ package com.pffair.flexibletable;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,14 @@ public class MainActivity extends AppCompatActivity {
         lvList.setAdapter(mDataAdapter);
 
         initHeader(lvList);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mDataAdapter.refresh();
+            }
+        },1000);
+
     }
 
 
@@ -80,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
         ImageView imageView3 = new ImageView(this);
         imageView3.setBackgroundColor(Color.CYAN);
-        MyFlexibleTableAdapter.Item flexibleItem3 = new MyFlexibleTableAdapter.Item(1, 2, imageView3);
+        MyFlexibleTableAdapter.Item flexibleItem3 = new MyFlexibleTableAdapter.Item(1, 1, imageView3);
         flexibleItemList.add(flexibleItem3);
 
 
@@ -100,14 +109,16 @@ public class MainActivity extends AppCompatActivity {
 
     public static class DataAdapter extends BaseAdapter {
 
+        List<String> list = new ArrayList();
+
         @Override
         public int getCount() {
-            return 50;
+            return list.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return "测试mFlexibleTable和listview的结合";
+            return list.get(position);
         }
 
         @Override
@@ -122,6 +133,13 @@ public class MainActivity extends AppCompatActivity {
                         .inflate(R.layout.item_list, parent, false);
             }
             return convertView;
+        }
+
+        public void refresh() {
+            for(int i=0;i<100;i++){
+                list.add("测试mFlexibleTable和listview的结合");
+            }
+            notifyDataSetChanged();
         }
     }
 }
